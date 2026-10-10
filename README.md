@@ -30,3 +30,24 @@ If the AI call fails or returns invalid JSON, the user sees a clear message ("Co
 - No user accounts or saved history yet.
 - Very long notes are truncated to 8000 characters.
 - Possible next steps: PDF upload, flashcard mode, rate limiting.
+## Testing
+- Vitest and React Testing Library, 3 unit tests for the Home page (renders, success state, error state). Run with `npm test`.
+
+## Performance and accessibility audit
+- Lighthouse (mobile, live URL): Performance 91, Accessibility 100, Best Practices 100, SEO 100.
+- axe DevTools: 0 issues (WCAG 2.1 AA).
+- **Improvement from audit findings:** the first audit scored 76-84 on Performance and flagged heavy JavaScript. I moved the static heading and intro text into a server component and kept only the form as a client component (`Summarizer.tsx`), so less JavaScript ships to the browser.
+
+## Deployment checklist
+- [x] App deployed on Vercel from the `main` branch
+- [x] `GEMINI_API_KEY` stored as a Vercel environment variable (never committed)
+- [x] `.env.local` is in `.gitignore`
+- [x] Tests pass (`npm test`)
+- [x] Live URL tested end to end
+- [x] Lighthouse and axe audits run on the live URL
+
+## How it fails safely
+Bad input gets a clear message (400). If the AI call or JSON parsing fails, the user sees "Could not summarize right now. Please try again." and the app keeps working.
+
+## Rollback plan
+Every push to `main` redeploys automatically on Vercel. To roll back, open the Vercel dashboard, go to Deployments, pick the last good deployment, and click Instant Rollback. Code can also be reverted with `git revert` and pushed.
